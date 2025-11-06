@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Hero from "@/components/Hero";
 import TrainingForm from "@/components/TrainingForm";
+import ConfigForm from "@/components/ConfigForm";
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState('hero'); // 'hero', 'form', 'config'
@@ -15,15 +16,16 @@ export default function Home() {
     setCurrentStep('config');
   };
 
+  const handleConfigComplete = () => {
+    // Próxima etapa - você pode implementar depois
+    console.log('Configuração completa!');
+  };
+
   return (
     <>
       {currentStep === 'hero' && <Hero onStart={handleStartTraining} />}
       {currentStep === 'form' && <TrainingForm onFileUploaded={handleFileUploaded} />}
-      {currentStep === 'config' && (
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#230f2b' }}>
-          <h1 className="text-4xl font-bold" style={{ color: '#ebebbc' }}>exemplo</h1>
-        </div>
-      )}
+      {currentStep === 'config' && <ConfigForm onConfigComplete={handleConfigComplete} />}
     </>
   );
 }

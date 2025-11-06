@@ -53,10 +53,6 @@ export default function TrainingForm({ onFileUploaded }) {
       // Criar FormData para enviar o arquivo
       const formData = new FormData();
       formData.append('file', selectedFile);
-      formData.append('filePath', selectedFile.name);
-
-      // Chamada de exemplo para a API (você vai implementar)
-
       const response = await postFilePath(formData);
     
         if (response && response.status === 200) {
