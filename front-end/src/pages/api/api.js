@@ -43,3 +43,16 @@ export const getConfig = async () => {
       transferFunction: "logistica", // 'linear', 'logistica', ou 'hiperbolica'
     };
 };
+
+export const postConfig = async (config) => {
+  try {
+    const response = await api.post("/api/config", config, {});
+    if (response.status == 200) {
+      return true;
+    }
+    return false;
+  }catch (error) {
+    console.error("Erro ao enviar a configuração:", error);
+    return false;
+  }
+}

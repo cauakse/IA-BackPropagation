@@ -1,6 +1,6 @@
 "use client";
 
-import { getConfig } from "@/pages/api/api";
+import { getConfig, postConfig } from "@/pages/api/api";
 import { useState, useEffect } from "react";
 
 export default function ConfigForm({ onConfigComplete }) {
@@ -57,7 +57,7 @@ export default function ConfigForm({ onConfigComplete }) {
     }));
   };
 
-  const validateAndSubmit = () => {
+  const validateAndSubmit = async () => {
     // Validações
     if (
       config.inputLayer < 1 ||
@@ -86,7 +86,12 @@ export default function ConfigForm({ onConfigComplete }) {
     }
 
     // Se tudo estiver válido, continua
-    onConfigComplete(config);
+    const response = await postConfig(config);
+    if (!response) {
+      alert("Erro ao enviar a configuração para o servidor");
+      return;
+    }
+    onConfigComplete(response);
   };
 
   if (isLoading) {

@@ -38,11 +38,6 @@ public class ConfigController {
     @PostMapping
     public ResponseEntity<Object> setConfig(@RequestBody Config config){
         configurateInitial.SetUserConfig(config);
-        //iniciar treinamento aqui
-        if (treinamento.initializeTraining()){
-            return ResponseEntity.ok("Configuration set and training initialized");
-        } else {
-            return ResponseEntity.status(500).body("Error initializing training");
-        }
+        return ResponseEntity.ok("Configuration set successfully");
     }
 }

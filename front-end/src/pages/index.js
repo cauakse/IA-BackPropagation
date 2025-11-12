@@ -16,16 +16,36 @@ export default function Home() {
     setCurrentStep('config');
   };
 
-  const handleConfigComplete = () => {
-    // Próxima etapa - você pode implementar depois
-    console.log('Configuração completa!');
+  const handleConfigComplete = (response) => {
+    if(response){
+        setCurrentStep('chart');
+    }
+
+    //abrir conexao websocket e enviar comando para iniciar treinamento
+    webSocket();
   };
+
+  const webSocket = async ()=>{
+    const socket = new WebSocket('ws://localhost:8080/training');
+
+    socket.onopen = () => {
+      console.log('WebSocket connection established');
+      socket.send("start");
+    }
+
+    socket.onmessage = (event) => {
+      //should update chart with data from event.data
+      console.log('Message from server ', event.data);
+    }
+
+  }
 
   return (
     <>
       {currentStep === 'hero' && <Hero onStart={handleStartTraining} />}
       {currentStep === 'form' && <TrainingForm onFileUploaded={handleFileUploaded} />}
       {currentStep === 'config' && <ConfigForm onConfigComplete={handleConfigComplete} />}
+      {currentStep === 'chart' && <div>Chart Component Placeholder</div>}
     </>
   );
 }
