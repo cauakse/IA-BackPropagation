@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/api/config")
 public class ConfigController {
 
@@ -25,6 +25,7 @@ public class ConfigController {
 
         if (fileHolder.hasFile()){
             try{
+                treinamento.resetTraining();
                 Config config = configurateInitial.ConfigureInitialAndNormalize(fileHolder.getFileData());
                 configurateInitial.setConfigured(true);
                 return ResponseEntity.ok(config);
@@ -39,5 +40,13 @@ public class ConfigController {
     public ResponseEntity<Object> setConfig(@RequestBody Config config){
         configurateInitial.SetUserConfig(config);
         return ResponseEntity.ok("Configuration set successfully");
+    }
+
+    @GetMapping("/reset")
+    public ResponseEntity<Object> resetConfig(){
+        fileHolder.reset();
+        configurateInitial.reset();
+        treinamento.resetTraining();
+        return ResponseEntity.ok("Configuration reset successfully");
     }
 }

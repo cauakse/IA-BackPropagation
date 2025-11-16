@@ -12,6 +12,8 @@ public class Config {
 
     private String transferFunction;
 
+    private boolean useBias;
+
     public Config(){
 
     }
@@ -80,5 +82,13 @@ public class Config {
 
     public void setTransferFunction(String transferFunction) {
         this.transferFunction = transferFunction;
+    }
+
+    public boolean isUseBias() {
+        return useBias;
+    }
+
+    public void setUseBias(boolean useBias) {
+        this.useBias = useBias;
     }
 }

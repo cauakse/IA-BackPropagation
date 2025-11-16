@@ -3,6 +3,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "http://localhost:8080",
   validateStatus: (status) => status >= 200 && status < 500,
+  withCredentials: true,
 });
 
 export const postFilePath = async (formData) => {
@@ -55,4 +56,31 @@ export const postConfig = async (config) => {
     console.error("Erro ao enviar a configuração:", error);
     return false;
   }
+}
+
+export const uploadTestFile = async (formData) => {
+  try{
+    const response = await api.post("/api/file/test",formData);
+    if (response.status == 200) {
+      return true;
+    }
+    return false;
+  }catch (error) {
+    console.error("Erro ao enviar o arquivo de teste:", error);
+    return false;
+  }
+};
+
+export const getReset = async () => {
+  try {
+    const response = await api.get("/api/config/reset");
+    if (response.status == 200) {
+      return true;
+    }
+    return false;
+  }
+  catch (error) {
+    console.error("Erro ao resetar o servidor:", error);
+    return false;
+  } 
 }

@@ -6,26 +6,27 @@ import { useState, useEffect } from "react";
 export default function ConfigForm({ onConfigComplete }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
-
-  // Estados para os campos do formulário
-  const [config, setConfig] = useState({
-    // Neurônios
+ const [config, setConfig] = useState({
+  
     inputLayer: 6,
     outputLayer: 5,
     hiddenLayer: 10,
 
-    // Erro e Iterações
+
     errorValue: 0.01,
     iterations: 1000,
 
-    // Fator de aprendizado
+
     learningRate: 0.1,
 
-    // Função de transferência
+
+    useBias: true,
+
+  
     transferFunction: "logistica",
   });
 
-  // Carregar configurações padrão da API ao montar o componente
+
   useEffect(() => {
     const loadDefaultConfig = async () => {
       try {
@@ -38,6 +39,7 @@ export default function ConfigForm({ onConfigComplete }) {
           errorValue: response.errorValue || 0.01,
           iterations: response.iterations || 1000,
           learningRate: response.learningRate || 0.1,
+          useBias: response.useBias !== undefined ? response.useBias : true,
           transferFunction: response.transferFunction || "logistica",
         });
       } catch (error) {
@@ -58,7 +60,7 @@ export default function ConfigForm({ onConfigComplete }) {
   };
 
   const validateAndSubmit = async () => {
-    // Validações
+  
     if (
       config.inputLayer < 1 ||
       config.outputLayer < 1 ||
@@ -85,13 +87,14 @@ export default function ConfigForm({ onConfigComplete }) {
       return;
     }
 
-    // Se tudo estiver válido, continua
+
     const response = await postConfig(config);
     if (!response) {
       alert("Erro ao enviar a configuração para o servidor");
       return;
     }
-    onConfigComplete(response);
+
+    onConfigComplete(config);
   };
 
   if (isLoading) {
@@ -118,7 +121,7 @@ export default function ConfigForm({ onConfigComplete }) {
       className="min-h-screen overflow-y-auto py-12"
       style={{ backgroundColor: "#230f2b" }}
     >
-      {/* Formas geométricas decorativas no fundo */}
+
       <div className="fixed inset-0 overflow-hidden opacity-10 pointer-events-none">
         <div
           className="absolute top-20 right-1/4 w-32 h-32 rounded-full"
@@ -139,7 +142,7 @@ export default function ConfigForm({ onConfigComplete }) {
       </div>
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10 max-w-5xl">
-        {/* Header */}
+
         <div className="text-center mb-12">
           <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 backdrop-blur-sm mb-6"
@@ -168,9 +171,8 @@ export default function ConfigForm({ onConfigComplete }) {
           </p>
         </div>
 
-        {/* Formulário */}
         <div className="space-y-8">
-          {/* Seção 1: Número de Neurônios */}
+
           <div
             className="p-8 rounded-2xl backdrop-blur-sm border-2"
             style={{
@@ -191,7 +193,7 @@ export default function ConfigForm({ onConfigComplete }) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Camada de Entrada */}
+
               <div>
                 <label
                   className="block text-sm font-medium mb-2"
@@ -218,7 +220,7 @@ export default function ConfigForm({ onConfigComplete }) {
                 />
               </div>
 
-              {/* Camada Oculta */}
+
               <div>
                 <label
                   className="block text-sm font-medium mb-2"
@@ -245,7 +247,6 @@ export default function ConfigForm({ onConfigComplete }) {
                 />
               </div>
 
-              {/* Camada de Saída */}
               <div>
                 <label
                   className="block text-sm font-medium mb-2"
@@ -274,7 +275,6 @@ export default function ConfigForm({ onConfigComplete }) {
             </div>
           </div>
 
-          {/* Seção 2: Erro e Iterações */}
           <div
             className="p-8 rounded-2xl backdrop-blur-sm border-2"
             style={{
@@ -295,7 +295,7 @@ export default function ConfigForm({ onConfigComplete }) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Valor do Erro */}
+
               <div>
                 <label
                   className="block text-sm font-medium mb-2"
@@ -327,7 +327,6 @@ export default function ConfigForm({ onConfigComplete }) {
                 />
               </div>
 
-              {/* Número de Iterações */}
               <div>
                 <label
                   className="block text-sm font-medium mb-2"
@@ -356,7 +355,6 @@ export default function ConfigForm({ onConfigComplete }) {
             </div>
           </div>
 
-          {/* Seção 3: Fator de Aprendizado (N) */}
           <div
             className="p-8 rounded-2xl backdrop-blur-sm border-2"
             style={{
@@ -372,47 +370,91 @@ export default function ConfigForm({ onConfigComplete }) {
                 <span className="text-xl">⚡</span>
               </div>
               <h2 className="text-2xl font-bold" style={{ color: "#ebebbc" }}>
-                Fator de Aprendizado (N)
+                Parâmetros de Aprendizado
               </h2>
             </div>
 
-            <div className="max-w-md">
-              <label
-                className="block text-sm font-medium mb-2"
-                style={{ color: "#bce3c5" }}
-              >
-                Learning Rate
-                <span className="text-xs opacity-70 ml-2">(0 &lt; N ≤ 1)</span>
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                min="0.01"
-                max="1"
-                value={config.learningRate}
-                onChange={(e) =>
-                  handleInputChange(
-                    "learningRate",
-                    parseFloat(e.target.value) || 0
-                  )
-                }
-                className="w-full px-4 py-3 rounded-lg border-2 font-semibold text-lg transition-all focus:outline-none focus:scale-105"
-                style={{
-                  backgroundColor: "rgba(235, 235, 188, 0.1)",
-                  borderColor: "#bce3c5",
-                  color: "#ebebbc",
-                }}
-              />
-              <p
-                className="text-xs mt-2 opacity-70"
-                style={{ color: "#bce3c5" }}
-              >
-                Controla a velocidade de aprendizado da rede neural
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <div>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: "#bce3c5" }}
+                >
+                  Learning Rate (N)
+                  <span className="text-xs opacity-70 ml-2">(0 &lt; N ≤ 1)</span>
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  max="1"
+                  value={config.learningRate}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "learningRate",
+                      parseFloat(e.target.value) || 0
+                    )
+                  }
+                  className="w-full px-4 py-3 rounded-lg border-2 font-semibold text-lg transition-all focus:outline-none focus:scale-105"
+                  style={{
+                    backgroundColor: "rgba(235, 235, 188, 0.1)",
+                    borderColor: "#bce3c5",
+                    color: "#ebebbc",
+                  }}
+                />
+                <p
+                  className="text-xs mt-2 opacity-70"
+                  style={{ color: "#bce3c5" }}
+                >
+                  Controla a velocidade de aprendizado da rede neural
+                </p>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: "#bce3c5" }}
+                >
+                  Configuração de Bias
+                </label>
+                <label
+                  className="flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all hover:scale-102 border-2 h-[60px]"
+                  style={{
+                    backgroundColor: config.useBias
+                      ? "rgba(188, 227, 197, 0.2)"
+                      : "rgba(235, 235, 188, 0.05)",
+                    borderColor: config.useBias ? "#bce3c5" : "transparent",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={config.useBias}
+                    onChange={(e) =>
+                      handleInputChange("useBias", e.target.checked)
+                    }
+                    className="w-5 h-5 cursor-pointer rounded"
+                    style={{ accentColor: "#bce3c5" }}
+                  />
+                  <div className="flex-1">
+                    <div
+                      className="font-semibold text-lg"
+                      style={{ color: "#ebebbc" }}
+                    >
+                      Usar Bias
+                    </div>
+                    <div
+                      className="text-sm opacity-70"
+                      style={{ color: "#bce3c5" }}
+                    >
+                      Adiciona termo de viés aos neurônios
+                    </div>
+                  </div>
+                </label>
+              </div>
             </div>
           </div>
 
-          {/* Seção 4: Função de Transferência */}
           <div
             className="p-8 rounded-2xl backdrop-blur-sm border-2"
             style={{
@@ -433,7 +475,7 @@ export default function ConfigForm({ onConfigComplete }) {
             </div>
 
             <div className="space-y-4">
-              {/* Linear */}
+
               <label
                 className="flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all hover:scale-102 border-2"
                 style={{
@@ -474,7 +516,6 @@ export default function ConfigForm({ onConfigComplete }) {
                 </div>
               </label>
 
-              {/* Logística */}
               <label
                 className="flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all hover:scale-102 border-2"
                 style={{
@@ -515,7 +556,6 @@ export default function ConfigForm({ onConfigComplete }) {
                 </div>
               </label>
 
-              {/* Hiperbólica */}
               <label
                 className="flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all hover:scale-102 border-2"
                 style={{
@@ -558,7 +598,6 @@ export default function ConfigForm({ onConfigComplete }) {
             </div>
           </div>
 
-          {/* Botão de Submissão */}
           <div className="flex justify-center pt-6">
             <button
               onClick={validateAndSubmit}
@@ -587,7 +626,6 @@ export default function ConfigForm({ onConfigComplete }) {
                 </svg>
               </span>
 
-              {/* Efeito de brilho no hover */}
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
                 style={{ backgroundColor: "#ebebbc" }}
