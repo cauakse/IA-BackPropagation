@@ -1,0 +1,2 @@
+o front-end - entre no caminho, rode npm i. Depois de instalar rode npm run dev
+o back-end - entre em alguma IDE e rode o arquivo, ou builda e roda

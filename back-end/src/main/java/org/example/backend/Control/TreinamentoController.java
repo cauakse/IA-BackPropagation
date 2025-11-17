@@ -24,7 +24,6 @@ public class TreinamentoController {
 
         if (treinamento != null) {
             System.out.println("Starting training from STOMP...");
-            // Passe o acessor para o método
             treinamento.initializeTraining(headerAccessor);
         } else {
             System.err.println("ERRO: Treinamento não encontrado na sessão WebSocket!");
@@ -35,7 +34,6 @@ public class TreinamentoController {
     public void continueTraining(SimpMessageHeaderAccessor headerAccessor) throws Exception {
         Treinamento treinamento = getTreinamentoFromSession(headerAccessor);
         if (treinamento != null) {
-            // Passe o acessor
             treinamento.continueTraining(headerAccessor);
         }
     }
@@ -44,7 +42,6 @@ public class TreinamentoController {
     public void startTest(SimpMessageHeaderAccessor headerAccessor) throws Exception {
         Treinamento treinamento = getTreinamentoFromSession(headerAccessor);
         if (treinamento != null) {
-            // Passe o acessor
             treinamento.startTesting(headerAccessor);
         }
     }
@@ -53,7 +50,6 @@ public class TreinamentoController {
     public void continueTrainingWithLearningRateReduce(SimpMessageHeaderAccessor headerAccessor) throws Exception {
         Treinamento treinamento = getTreinamentoFromSession(headerAccessor);
         if (treinamento != null) {
-            // Passe o acessor
             treinamento.continueTrainingWithLearningRateReduce(headerAccessor);
         }
     }

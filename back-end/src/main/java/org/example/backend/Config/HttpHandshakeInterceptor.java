@@ -30,7 +30,6 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
             if (session != null) {
                 System.out.println("HTTP_INTERCEPTOR: Sessão HTTP encontrada: " + session.getId());
 
-                // 1. Treinamento
                 Object realTreinamento = session.getAttribute(getScopedBeanName("treinamento"));
                 if (realTreinamento != null) {
                     attributes.put("treinamento", realTreinamento);
@@ -39,7 +38,6 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
                     System.err.println("HTTP_INTERCEPTOR: FALHA - Bean 'treinamento' NÃO encontrado na sessão HTTP.");
                 }
 
-                // 2. ConfigurateInitial
                 Object realConfig = session.getAttribute(getScopedBeanName("configurateInitial"));
                 if (realConfig != null) {
                     attributes.put("configurateInitial", realConfig);
@@ -48,7 +46,6 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
                     System.err.println("HTTP_INTERCEPTOR: FALHA - Bean 'configurateInitial' NÃO encontrado na sessão HTTP.");
                 }
 
-                // 3. FileHolder
                 Object realFileHolder = session.getAttribute(getScopedBeanName("fileHolder"));
                 if (realFileHolder != null) {
                     attributes.put("fileHolder", realFileHolder);
@@ -57,13 +54,11 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
                     System.err.println("HTTP_INTERCEPTOR: FALHA - Bean 'fileHolder' NÃO encontrado na sessão HTTP.");
                 }
 
-                // 4. Rede
                 Object realRede = session.getAttribute(getScopedBeanName("rede"));
                 if (realRede != null) {
                     attributes.put("rede", realRede);
                     System.out.println("HTTP_INTERCEPTOR: SUCESSO - Bean 'rede' copiado.");
                 } else {
-                    // Isso é esperado, já que 'rede' não é um bean de sessão
                     System.out.println("HTTP_INTERCEPTOR: INFO - Bean 'rede' não é de sessão (esperado).");
                 }
 
@@ -77,6 +72,5 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                WebSocketHandler wsHandler, Exception exception) {
-        // Nada a fazer aqui
     }
 }

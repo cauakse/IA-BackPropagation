@@ -27,26 +27,13 @@ public class Treinamento {
     }
 
     private Rede getRede(SimpMessageHeaderAccessor accessor) {
-        // Se a rede for nula nos atributos, podemos pegá-la do campo 'this.rede'
-        // Se este.rede for nulo, pegamos dos atributos
-        // Isso depende de como a 'rede' é criada.
-
-        // Vamos assumir que 'rede' é criada em 'initializeTraining' e armazenada no 'this.rede'.
-        // Se 'rede' for um bean de sessão separado, você usaria:
-        // return (Rede) accessor.getSessionAttributes().get("rede");
-
-        // Pelo seu código, 'rede' parece ser um campo local, não um bean injetado.
-        // Vamos focar no 'configurateInitial' que é o que deu o erro.
-        return this.rede; // Vamos manter a lógica original por enquanto
+        return this.rede;
     }
 
     public void sendIteration(RespostaIteracao respostaIteracao) {
-        // Envia a mensagem para todos os clientes inscritos no tópico "/topic/progress"
-        // O frontend estará ouvindo este tópico.
         messagingTemplate.convertAndSend("/topic/progress", respostaIteracao);
     }
 
-    // Este é o novo "sendConfusionMatrix"
     public void sendConfusionMatrix(int[][] confusionMatrix) {
         messagingTemplate.convertAndSend("/topic/progress", confusionMatrix);
     }
